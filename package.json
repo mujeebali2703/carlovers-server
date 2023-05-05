@@ -1,22 +1,26 @@
 {
-  "name": "starter-express-api",
+  "name": "carlovers-server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/cyclic-software/starter-express-api.git"
-  },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/cyclic-software/starter-express-api/issues"
-  },
-  "homepage": "https://github.com/cyclic-software/starter-express-api#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "axios": "^1.3.4",
+    "body-parser": "^1.20.0",
+    "carquery-api": "^0.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "node-cache": "^5.1.2",
+    "nodemon": "^2.0.16",
+    "stripe": "^9.5.0",
+    "zipcodes-nearby": "^0.1.4",
+    "zipcodes-nearby-boost": "^1.0.1"
   }
 }
