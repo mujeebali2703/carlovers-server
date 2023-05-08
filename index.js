@@ -84,7 +84,7 @@ app.post('/carapimodel', async (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Authorization', `Bearer ${token}`);
   try {
-    await axios.get(`https://carapi.app/api/models?verbose=yes&year=${year}&make=${make}`,{
+    await axios.get(`https://carapi.app/api/models?verbose='yes'&year=${year}&make=${make}`,{
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
