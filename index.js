@@ -605,6 +605,44 @@ app.post('/createsubscription', async (req, res) => {
     }
   });
 
+  app.post('/getcustomerinvoices', async (req, res) => {
+    let {customerid} = req.body;
+    console.log(customerid)
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    try {
+      const invoices = await stripe.invoices.list({
+        customer:customerid
+      });
+
+      res.send(invoices);
+    } catch (error) {
+      return res.status(400).send({ error: { message: error.message } });
+    }
+  });
+
+  app.post('/getcustomercharges', async (req, res) => {
+    let {customerid} = req.body;
+    console.log(customerid)
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    try {
+      const charges = await stripe.charges.list(
+        {
+          customer:customerid
+        }
+      );
+
+      res.send(charges);
+    } catch (error) {
+      return res.status(400).send({ error: { message: error.message } });
+    }
+  });
+
   app.get('/getproducts', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
