@@ -687,6 +687,20 @@ app.post('/createsubscription', async (req, res) => {
     }
   });
 
+  app.post('/getcustomercreditcards', async (req, res) => {
+    let {id} = req.body;
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    try {
+      const cards = await stripe.customers.listSources(id, {object: 'card'} );
+        res.send(cards);
+    } catch (error) {
+      return res.status(400).send({ error: { message: error.message } });
+    }
+  });
+
 
 app.post("/listpaymentmethods",cors(), async (req,res)=>{
     let {customerid} = req.body;
