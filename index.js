@@ -2,7 +2,7 @@ const express = require("express");
 const CarQuery = require('carquery-api');
 const app = express();
 require("dotenv").config();
-const stripe = require("stripe")("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");
+const stripe = require("stripe")("sk_test_51L4sVRKDWgvpMn9hU8jPB7MelGrd7haSRLdT69aBsh4x9DUZKg4pFqtG5ydPrq9bQJ91EbDp1Zx0uqwBF0nx9q5O00zqg2H8aN");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const axios = require('axios');
@@ -166,7 +166,7 @@ app.post("/custom_account", async (req, res) => { // needs to recieve the bank a
   try {
     const account = await stripe.accounts.create({
       country: 'US',
-      type: 'custom',
+      type: 'standard',
       business_type: 'individual',
       business_profile: {
         mcc: mcc,
