@@ -691,6 +691,54 @@ app.post('/getcustomercharges', async (req, res) => {
   }
 });
 
+app.post('/getcustomerdefaultsourcetoken', async (req, res) => {
+  let { customerid } = req.body;
+  console.log(customerid)
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  try {
+    const customer = await stripe.customers.retrieve(customerId);
+
+    // Check if the customer has a default source
+    if (customer.default_source) {
+      // Retrieve the source details using the default_source ID
+      const source = await stripe.customers.retrieveSource(customerId, customer.default_source);
+
+      // Extract and return the source token
+      const sourceToken = source.id;
+      console.log('Customer default source token:', sourceToken);
+      res.send(sourceToken);
+    } else {
+      console.error('Customer does not have a default source.');
+      return null;
+    }
+  } catch (error) {
+    return res.status(400).send({ error: { message: error.message } });
+  }
+});
+
+app.post('/createcustomercharges', async (req, res) => {
+  let { customerid, sourceToken, amount, currency } = req.body;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  try {
+    const charge = await stripe.charges.create({
+      amount: amount,
+      currency: currency,
+      customer: customerid,
+      source: sourceToken,
+      description: 'Charge for customer@example.com',
+    });
+    res.send(charge);
+  } catch (error) {
+    return res.status(400).send({ error: { message: error.message } });
+  }
+});
+
 app.get('/getproducts', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
@@ -782,21 +830,9 @@ app.post("/driverpayment", cors(), async (req, res) => {
       currency: 'usd',
       destination: driverstripe,
     });
-
-
-    console.log("Ending Driver Payment");
-    // res.json({
-    //     message:"Payment Successful",
-    //     success:true
-    // });
     res.send(transfer);
 
   } catch (error) {
-    console.log(error);
-    // res.json({
-    //     message:"Payment Failed",
-    //     success:false
-    // });
     res.send(error);
   }
   // res.send("Processing Payment");
