@@ -156,6 +156,20 @@ app.post("/getcustomerbyemail", cors(), async (req, res) => {
   }
 });
 
+app.post("/getcustomerbyid", cors(), async (req, res) => {
+  let { id } = req.body;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  try {
+    const customer = await stripe.customers.retrieve(id);
+    res.send(customer);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
 app.post("/getcustomerconnectaccount", cors(), async (req, res) => {
   let { id } = req.body;
   res.setHeader('Access-Control-Allow-Origin', '*');
