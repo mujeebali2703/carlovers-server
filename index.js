@@ -699,12 +699,12 @@ app.post('/getcustomerdefaultsourcetoken', async (req, res) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Allow-Credentials', true);
   try {
-    const customer = await stripe.customers.retrieve(customerId);
+    const customer = await stripe.customers.retrieve(customerid);
 
     // Check if the customer has a default source
     if (customer.default_source) {
       // Retrieve the source details using the default_source ID
-      const source = await stripe.customers.retrieveSource(customerId, customer.default_source);
+      const source = await stripe.customers.retrieveSource(customerid, customer.default_source);
 
       // Extract and return the source token
       const sourceToken = source.id;
