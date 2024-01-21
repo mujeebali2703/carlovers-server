@@ -720,18 +720,18 @@ app.post('/getcustomerdefaultsourcetoken', async (req, res) => {
 });
 
 app.post('/createcustomercharges', async (req, res) => {
-  let { customerid, sourceToken, amount, currency } = req.body;
+  let { customer, source, amount, currency, description } = req.body;
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Allow-Credentials', true);
   try {
     const charge = await stripe.charges.create({
-      amount: amount,
-      currency: currency,
-      customer: customerid,
-      source: sourceToken,
-      description: 'Charge for customer@example.com',
+      amount,
+      currency,
+      customer,
+      source,
+      description
     });
     res.send(charge);
   } catch (error) {
