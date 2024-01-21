@@ -166,7 +166,7 @@ app.post("/custom_account", async (req, res) => { // needs to recieve the bank a
   try {
     const account = await stripe.accounts.create({
       country: 'US',
-      type: 'custom',
+      type: 'standard',
       business_type: 'individual',
       business_profile: {
         mcc: mcc,
@@ -231,8 +231,8 @@ app.post('/create-account-link', async (req, res) => {
   try {
     const accountLink = await stripe.accountLinks.create({
       account: id, // Replace with your actual connected account ID
-      refresh_url: `${base}/onboardingsuccess`,
-      return_url: `${base}/onboardingerror`,
+      refresh_url: `${base}/onboardingerror`,
+      return_url: `${base}/onboardingsuccess`,
       type: 'account_onboarding',
     });
 
