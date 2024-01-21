@@ -225,6 +225,24 @@ app.post("/custom_account", async (req, res) => { // needs to recieve the bank a
 
 });
 
+
+app.post('/create-account-link', async (req, res) => {
+  let { id, base } = req.body;
+  try {
+    const accountLink = await stripe.accountLinks.create({
+      account: id, // Replace with your actual connected account ID
+      refresh_url: `${base}/onboardingsuccess`,
+      return_url: `${base}/onboardingerror`,
+      type: 'account_onboarding',
+    });
+
+    res.json({ url: accountLink.url });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 app.post("/attachpaymentmethod", async (req, res) => {
   let { id, customer } = req.body;
   res.setHeader('Access-Control-Allow-Origin', '*');
