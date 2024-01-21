@@ -166,7 +166,7 @@ app.post("/custom_account", async (req, res) => { // needs to recieve the bank a
   try {
     const account = await stripe.accounts.create({
       country: 'US',
-      type: 'standard',
+      type: 'custom',
       business_type: 'individual',
       business_profile: {
         mcc: mcc,
