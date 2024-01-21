@@ -163,9 +163,9 @@ app.post("/getcustomerconnectaccount", cors(), async (req, res) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Allow-Credentials', true);
   try {
-    const connectAccount = await stripe.accounts.retrieve(id);
-    // console.log('Connect Account:', connectAccount);
-    // return connectAccount;
+    const customer = await stripe.customers.retrieve(id);
+    const accountId = customer.metadata.connectAccountId;
+    const connectAccount = await stripe.accounts.retrieve(accountId);
     res.send(connectAccount);
   } catch (error) {
     res.send(error);
