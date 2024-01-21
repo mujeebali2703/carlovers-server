@@ -156,6 +156,22 @@ app.post("/getcustomerbyemail", cors(), async (req, res) => {
   }
 });
 
+app.post("/getcustomerconnectaccount", cors(), async (req, res) => {
+  let { id } = req.body;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  try {
+    const connectAccount = await stripe.accounts.retrieve(id);
+    // console.log('Connect Account:', connectAccount);
+    // return connectAccount;
+    res.send(connectAccount);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
 app.post("/custom_account", async (req, res) => { // needs to recieve the bank account or credit card here and pass in object
   // console.log("work in fun")
   let { mcc, first_name, last_name, day, month, year, email, phone, ssn_last_4, state, city, postal_code, line1, bank_name, bank_country, bank_currency, bank_account_number, bank_account_routing_number, account_holder_name, account_holder_type, front_document } = req.body;
