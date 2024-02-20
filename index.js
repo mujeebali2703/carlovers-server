@@ -544,8 +544,6 @@ app.post("/confirmpaymentintent", async (req, res) => {
   }
 });
 
-
-
 app.post('/createsubscription', async (req, res) => {
   let { customerID, priceID } = req.body;
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -585,8 +583,6 @@ app.post('/payinvoice', async (req, res) => {
     return res.status(400).send({ error: { message: error.message } });
   }
 });
-
-
 
 app.post('/cancelsubscription', async (req, res) => {
   let { subcID } = req.body;
@@ -655,7 +651,6 @@ app.post('/getcustomersubscriptions', async (req, res) => {
 
 app.post('/getcustomerinvoices', async (req, res) => {
   let { customerid } = req.body;
-  console.log(customerid)
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -673,7 +668,6 @@ app.post('/getcustomerinvoices', async (req, res) => {
 
 app.post('/getcustomercharges', async (req, res) => {
   let { customerid } = req.body;
-  console.log(customerid)
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -693,7 +687,6 @@ app.post('/getcustomercharges', async (req, res) => {
 
 app.post('/getcustomerdefaultsourcetoken', async (req, res) => {
   let { customerid } = req.body;
-  console.log(customerid)
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -797,7 +790,6 @@ app.post('/getcustomercreditcards', async (req, res) => {
   }
 });
 
-
 app.post("/listpaymentmethods", cors(), async (req, res) => {
   let { customerid } = req.body;
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -814,7 +806,6 @@ app.post("/listpaymentmethods", cors(), async (req, res) => {
     res.send(error);
   }
 });
-
 
 app.post("/driverpayment", cors(), async (req, res) => {
   let { amount, id, driverstripe } = req.body;
@@ -836,6 +827,48 @@ app.post("/driverpayment", cors(), async (req, res) => {
     res.send(error);
   }
   // res.send("Processing Payment");
+})
+
+app.post("/workshoppayment", cors(), async (req, res) => {
+  let { amount, workshopStripe } = req.body;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  try {
+    console.log("Staring Workshop Payment");
+    // Create a Transfer to the connected account (later):
+    const transfer = await stripe.transfers.create({
+      amount: amount,
+      currency: 'usd',
+      destination: workshopStripe,
+    });
+    res.send(transfer);
+
+  } catch (error) {
+    res.send(error);
+  }
+  // res.send("Processing Payment");
+});
+
+app.post("/createpayout", cors(), async (req, res) => {
+  let { connectAccountId, amount, currency } = req.body;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  try {
+    const payout = await stripe.payouts.create({
+      amount: amount,
+      currency: currency,
+      destination: connectAccountId,
+      description: `Claim for workshop`,
+    });
+    res.send(payout);
+  } catch (error) {
+    res.send(error);
+    return error;
+  }
 })
 
 
